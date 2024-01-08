@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.exception.TodoNotFoundException;
 import jakarta.inject.Singleton;
 
 @Singleton
@@ -7,7 +8,6 @@ public class TodoService {
   private final TodoRepository todoRepository;
 
   public TodoService(TodoRepository todoRepository) {
-
     this.todoRepository = todoRepository;
   }
 
@@ -19,15 +19,23 @@ public class TodoService {
     return new TodosWrapper(todoRepository.getAll());
   }
 
-  public Todo getTodoById(String id) {
-    return todoRepository.getTodoById(id);
+  public Todo getTodoById(Integer id) {
+    return todoRepository
+        .getTodoById(id)
+        .orElseThrow(() -> new TodoNotFoundException("todo Not found with id=" + id));
   }
 
-  public Todo deleteTodo(String id) {
+  public Todo deleteTodo(Integer id) {
+    todoRepository
+        .getTodoById(id)
+        .orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
     return todoRepository.deleteTodo(id);
   }
 
-  public Todo updateTodo(String id, String todoToUpdate) {
+  public Todo updateTodo(Integer id, String todoToUpdate) {
+    todoRepository
+        .getTodoById(id)
+        .orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
     return todoRepository.updateTodo(id, todoToUpdate);
   }
 }

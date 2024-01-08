@@ -4,6 +4,7 @@ import jakarta.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Singleton
@@ -25,18 +26,15 @@ public class TodoRepository {
     return todoList;
   }
 
-  public Todo getTodoById(String id) {
-    Integer idNumber = Integer.parseInt(id);
-    Todo todo = todoList.stream().filter((t) -> t.getId() == idNumber).findFirst().orElseThrow();
-    return todo;
+  public Optional<Todo> getTodoById(Integer id) {
+    return todoList.stream().filter((t) -> t.getId() == id).findFirst();
   }
 
-  public Todo deleteTodo(String id) {
-    Integer idNumber = Integer.parseInt(id);
+  public Todo deleteTodo(Integer id) {
     AtomicReference<Todo> deletedTodo = new AtomicReference<>();
     todoList.removeIf(
         todo -> {
-          if (todo.getId() == idNumber) {
+          if (todo.getId() == id) {
             deletedTodo.set(todo);
             return true;
           }
@@ -46,16 +44,15 @@ public class TodoRepository {
     if (deleted != null) {
       return deleted;
     } else {
-      throw new IllegalArgumentException("Todo with " + id + " not found");
+      return null;
     }
   }
 
-  public Todo updateTodo(String id, String todoToUpdate) {
-    Integer idNumber = Integer.parseInt(id);
+  public Todo updateTodo(Integer id, String todoToUpdate) {
     return todoList.stream()
-        .filter((todo) -> todo.getId() == idNumber)
+        .filter((todo) -> todo.getId() == id)
         .peek((todo) -> todo.setTodoText(todoToUpdate))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("todo with id " + id + " not found"));
+        .orElse(null);
   }
 }

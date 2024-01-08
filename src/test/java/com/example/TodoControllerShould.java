@@ -2,11 +2,18 @@ package com.example;
 
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class TodoControllerShould {
-  private TodoService todoService = mock(TodoService.class);
-  private TodoController todoController = new TodoController(todoService);
+  private static TodoService todoService;
+  private static TodoController todoController;
+
+  @BeforeAll
+  static void setUp() {
+    todoService = mock(TodoService.class);
+    todoController = new TodoController(todoService);
+  }
 
   @Test
   void create_todo() {
@@ -23,21 +30,21 @@ public class TodoControllerShould {
 
   @Test
   void return_todo_by_id() {
-    String id = "100";
+    Integer id = 100;
     Todo todo = todoController.getTodoById(id);
     verify(todoService).getTodoById(id);
   }
 
   @Test
   void delete_todo() {
-    String id = "100";
+    Integer id = 100;
     Todo todo = todoController.deleteTodo(id);
     verify(todoService).deleteTodo(id);
   }
 
   @Test
   void update_todo() {
-    String id = "100";
+    Integer id = 100;
     UpdateTodoDto updateTodoDto = new UpdateTodoDto("todo updated");
     Todo todo = todoController.updateTodo(id, updateTodoDto);
     verify(todoService).updateTodo(id, updateTodoDto.getTodoTextToUpdate());

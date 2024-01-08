@@ -7,7 +7,6 @@ public class TodoController {
   private final TodoService todoService;
 
   public TodoController(TodoService todoService) {
-
     this.todoService = todoService;
   }
 
@@ -22,17 +21,17 @@ public class TodoController {
   }
 
   @Get(value = "/{id}")
-  public Todo getTodoById(@PathVariable String id) {
+  public Todo getTodoById(@PathVariable Integer id) {
     return todoService.getTodoById(id);
   }
 
   @Delete(value = "/{id}")
-  public Todo deleteTodo(@PathVariable String id) {
+  public Todo deleteTodo(@PathVariable Integer id) {
     return todoService.deleteTodo(id);
   }
 
   @Put(value = "/{id}")
-  public Todo updateTodo(@PathVariable String id, @Body UpdateTodoDto updateTodoDto) {
+  public Todo updateTodo(@PathVariable Integer id, @Body UpdateTodoDto updateTodoDto) {
     return todoService.updateTodo(id, updateTodoDto.getTodoTextToUpdate());
   }
 }

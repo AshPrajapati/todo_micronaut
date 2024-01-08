@@ -33,7 +33,7 @@ class TodoControllerTest {
   void get_all_todos() {
     TodosWrapper todosWrapper = httpClient.toBlocking().retrieve(GET("/"), TodosWrapper.class);
     assertThat(todosWrapper).isNotNull();
-    assertThat(todosWrapper.getTodosLength()).isGreaterThanOrEqualTo(0);
+    assertThat(todosWrapper.getTodos().size()).isGreaterThanOrEqualTo(0);
   }
 
   @Test
