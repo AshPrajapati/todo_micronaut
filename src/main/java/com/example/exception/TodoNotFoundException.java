@@ -1,7 +1,17 @@
 package com.example.exception;
 
-public class TodoNotFoundException extends TodoException {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class TodoNotFoundException extends RuntimeException {
+  @JsonProperty(value = "message")
+  private final String message;
+
   public TodoNotFoundException(String message) {
-    super(message);
+    this.message = message;
+  }
+
+  @Override
+  public String getMessage() {
+    return message;
   }
 }

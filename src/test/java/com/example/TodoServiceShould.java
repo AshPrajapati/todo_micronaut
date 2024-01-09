@@ -81,14 +81,18 @@ public class TodoServiceShould {
   void should_throw_exception_if_todo_not_exist() {
     Integer id = 23;
     when(todoRepository.getTodoById(id)).thenReturn(Optional.ofNullable(null));
-    assertThatThrownBy(() -> todoService.getTodoById(id)).isInstanceOf(TodoNotFoundException.class);
+    assertThatThrownBy(() -> todoService.getTodoById(id))
+        .isInstanceOf(TodoNotFoundException.class)
+        .hasMessage("todo not found with id" + id);
   }
 
   @Test
   void should_throw_exception_if_todo_not_exist_on_delete() {
     Integer id = 23;
     when(todoRepository.getTodoById(id)).thenReturn(Optional.ofNullable(null));
-    assertThatThrownBy(() -> todoService.deleteTodo(id)).isInstanceOf(TodoNotFoundException.class);
+    assertThatThrownBy(() -> todoService.deleteTodo(id))
+        .isInstanceOf(TodoNotFoundException.class)
+        .hasMessage("todo not found with id" + id);
   }
 
   @Test
@@ -96,6 +100,7 @@ public class TodoServiceShould {
     Integer id = 23;
     when(todoRepository.getTodoById(id)).thenReturn(Optional.ofNullable(null));
     assertThatThrownBy(() -> todoService.updateTodo(id, "update todo"))
-        .isInstanceOf(TodoNotFoundException.class);
+        .isInstanceOf(TodoNotFoundException.class)
+        .hasMessage("todo not found with id" + id);
   }
 }

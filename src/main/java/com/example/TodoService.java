@@ -22,7 +22,7 @@ public class TodoService {
   public Todo getTodoById(Integer id) {
     return todoRepository
         .getTodoById(id)
-        .orElseThrow(() -> new TodoNotFoundException("todo Not found with id=" + id));
+        .orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
   }
 
   public Todo deleteTodo(Integer id) {

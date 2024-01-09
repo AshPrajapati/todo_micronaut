@@ -7,6 +7,7 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import java.util.Date;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +27,7 @@ class TodoControllerTest {
     assertThat(todo).isInstanceOf(Todo.class);
     assertThat(todo.getId()).isNotNull();
     assertThat(todo.getTodoText()).isEqualTo("first todo");
+    assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
   }
 
   @Test
@@ -42,6 +44,8 @@ class TodoControllerTest {
     Todo todo = httpClient.toBlocking().retrieve(GET("/102"), Todo.class);
     assertThat(todo).isNotNull();
     assertThat(todo.getId()).isEqualTo(102);
+    assertThat(todo).isInstanceOf(Todo.class);
+    assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
   }
 
   @Test
@@ -50,6 +54,8 @@ class TodoControllerTest {
     Todo todo = httpClient.toBlocking().retrieve(DELETE("/100"), Todo.class);
     assertThat(todo).isNotNull();
     assertThat(todo.getId()).isEqualTo(100);
+    assertThat(todo).isInstanceOf(Todo.class);
+    assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
   }
 
   @Test
@@ -60,5 +66,6 @@ class TodoControllerTest {
     assertThat(todo).isNotNull();
     assertThat(todo.getId()).isEqualTo(101);
     assertThat(todo.getTodoText()).isEqualTo(updateTodoDto.getTodoTextToUpdate());
+    assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
   }
 }

@@ -40,19 +40,18 @@ public class TodoRepository {
           }
           return false;
         });
-    Todo deleted = deletedTodo.get();
-    if (deleted != null) {
-      return deleted;
-    } else {
-      return null;
-    }
+    return deletedTodo.get();
   }
 
   public Todo updateTodo(Integer id, String todoToUpdate) {
-    return todoList.stream()
-        .filter((todo) -> todo.getId() == id)
-        .peek((todo) -> todo.setTodoText(todoToUpdate))
-        .findFirst()
-        .orElse(null);
+    Optional<Todo> todoToChangeOptional =
+        todoList.stream().filter((todo) -> todo.getId() == id).findFirst();
+    if (todoToChangeOptional.isPresent()) {
+      Todo todoToChange = todoToChangeOptional.get();
+      todoToChange.setTodoText(todoToUpdate);
+      return todoToChange;
+    } else {
+      return null;
+    }
   }
 }

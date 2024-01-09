@@ -2,15 +2,15 @@ package com.example;
 
 import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TodoControllerShould {
-  private static TodoService todoService;
-  private static TodoController todoController;
+  private TodoService todoService;
+  private TodoController todoController;
 
-  @BeforeAll
-  static void setUp() {
+  @BeforeEach
+  void setUp() {
     todoService = mock(TodoService.class);
     todoController = new TodoController(todoService);
   }
