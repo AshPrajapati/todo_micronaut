@@ -3,11 +3,13 @@ package com.example;
 import static io.micronaut.http.HttpRequest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.util.Date;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,11 +20,22 @@ class TodoControllerTest {
   @Inject
   private HttpClient httpClient;
 
+  private Todo todoCreated;
+
+  @BeforeEach
+  void setUp() {
+    CreateTodoDto todoBody = new CreateTodoDto("todo created");
+    todoCreated = httpClient.toBlocking().retrieve(POST("/create", todoBody), Todo.class);
+  }
+
   @Test
   @DisplayName("should create todo")
   void create_todo() {
     CreateTodoDto todoBody = new CreateTodoDto("first todo");
-    Todo todo = httpClient.toBlocking().retrieve(POST("/create", todoBody), Todo.class);
+    HttpResponse<Todo> todoResponse =
+        httpClient.toBlocking().exchange(POST("/create", todoBody), Todo.class);
+    assertThat(todoResponse.getStatus().getCode()).isEqualTo(201);
+    Todo todo = todoResponse.body();
     assertThat(todo).isNotNull();
     assertThat(todo).isInstanceOf(Todo.class);
     assertThat(todo.getId()).isNotNull();
@@ -41,9 +54,12 @@ class TodoControllerTest {
   @Test
   @DisplayName("should return todo by id")
   void get_todo_by_id() {
-    Todo todo = httpClient.toBlocking().retrieve(GET("/102"), Todo.class);
+    HttpResponse<Todo> todoResponse =
+        httpClient.toBlocking().exchange(GET("/" + todoCreated.getId()), Todo.class);
+    assertThat(todoResponse.getStatus().getCode()).isEqualTo(200);
+    Todo todo = todoResponse.body();
     assertThat(todo).isNotNull();
-    assertThat(todo.getId()).isEqualTo(102);
+    assertThat(todo.getId()).isEqualTo(todoCreated.getId());
     assertThat(todo).isInstanceOf(Todo.class);
     assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
   }
@@ -51,21 +67,25 @@ class TodoControllerTest {
   @Test
   @DisplayName("should delete todo")
   void delete_todo() {
-    Todo todo = httpClient.toBlocking().retrieve(DELETE("/100"), Todo.class);
-    assertThat(todo).isNotNull();
-    assertThat(todo.getId()).isEqualTo(100);
-    assertThat(todo).isInstanceOf(Todo.class);
-    assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
+    HttpResponse<Todo> todoResponse =
+        httpClient.toBlocking().exchange(DELETE("/" + todoCreated.getId()), Todo.class);
+    assertThat(todoResponse.getStatus().getCode()).isEqualTo(200);
+    Todo todo = todoResponse.body();
+    assertThat(todo).isNull();
   }
 
   @Test
   @DisplayName("update todo")
   void update_todo() {
     UpdateTodoDto updateTodoDto = new UpdateTodoDto("updatedTodo");
-    Todo todo = httpClient.toBlocking().retrieve(PUT("/101", updateTodoDto), Todo.class);
+    HttpResponse<Todo> todoResponse =
+        httpClient.toBlocking().exchange(PUT("/" + todoCreated.getId(), updateTodoDto), Todo.class);
+    assertThat(todoResponse.getStatus().getCode()).isEqualTo(200);
+    Todo todo = todoResponse.body();
     assertThat(todo).isNotNull();
-    assertThat(todo.getId()).isEqualTo(101);
+    assertThat(todo.getId()).isEqualTo(todoCreated.getId());
     assertThat(todo.getTodoText()).isEqualTo(updateTodoDto.getTodoTextToUpdate());
     assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
+
   }
 }

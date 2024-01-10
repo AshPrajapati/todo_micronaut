@@ -1,5 +1,6 @@
 package com.example;
 
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 
 @Controller("/todos")
@@ -11,8 +12,8 @@ public class TodoController {
   }
 
   @Post("/create")
-  public Todo createTodo(@Body CreateTodoDto todoToCreate) {
-    return todoService.create(todoToCreate);
+  public HttpResponse<Todo> createTodo(@Body CreateTodoDto todoToCreate) {
+    return HttpResponse.created(todoService.create(todoToCreate));
   }
 
   @Get("/")
@@ -21,17 +22,19 @@ public class TodoController {
   }
 
   @Get(value = "/{id}")
-  public Todo getTodoById(@PathVariable Integer id) {
-    return todoService.getTodoById(id);
+  public HttpResponse<Todo> getTodoById(@PathVariable Integer id) {
+    return HttpResponse.ok(todoService.getTodoById(id));
   }
 
   @Delete(value = "/{id}")
-  public Todo deleteTodo(@PathVariable Integer id) {
-    return todoService.deleteTodo(id);
+  public HttpResponse<Todo> deleteTodo(@PathVariable Integer id) {
+    todoService.deleteTodo(id);
+    return HttpResponse.ok();
   }
 
   @Put(value = "/{id}")
-  public Todo updateTodo(@PathVariable Integer id, @Body UpdateTodoDto updateTodoDto) {
-    return todoService.updateTodo(id, updateTodoDto.getTodoTextToUpdate());
+  public HttpResponse<Todo> updateTodo(
+      @PathVariable Integer id, @Body UpdateTodoDto updateTodoDto) {
+    return HttpResponse.ok(todoService.updateTodo(id, updateTodoDto.getTodoTextToUpdate()));
   }
 }

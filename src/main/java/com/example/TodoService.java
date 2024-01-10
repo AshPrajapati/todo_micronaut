@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.exception.TodoNotFoundException;
 import jakarta.inject.Singleton;
+import java.util.Date;
 
 @Singleton
 public class TodoService {
@@ -12,30 +13,35 @@ public class TodoService {
   }
 
   public Todo create(CreateTodoDto todoToCreate) {
-    return todoRepository.create(todoToCreate);
+    Todo todo = new Todo();
+    todo.setTodoText(todoToCreate.getTodoText());
+    todo.setTodoDate(new Date());
+    return todoRepository.save(todo);
   }
 
   public TodosWrapper getAllTodos() {
-    return new TodosWrapper(todoRepository.getAll());
+    return new TodosWrapper(todoRepository.findAll());
   }
 
   public Todo getTodoById(Integer id) {
     return todoRepository
-        .getTodoById(id)
+        .findById(id)
         .orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
   }
 
-  public Todo deleteTodo(Integer id) {
+  public void deleteTodo(Integer id) {
     todoRepository
-        .getTodoById(id)
+        .findById(id)
         .orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
-    return todoRepository.deleteTodo(id);
+    todoRepository.deleteById(id);
   }
 
   public Todo updateTodo(Integer id, String todoToUpdate) {
-    todoRepository
-        .getTodoById(id)
-        .orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
-    return todoRepository.updateTodo(id, todoToUpdate);
+    Todo foundTodo =
+        todoRepository
+            .findById(id)
+            .orElseThrow(() -> new TodoNotFoundException("todo not found with id" + id));
+    foundTodo.setTodoText(todoToUpdate);
+    return todoRepository.update(foundTodo);
   }
 }
