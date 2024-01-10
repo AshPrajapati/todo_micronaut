@@ -67,11 +67,10 @@ class TodoControllerTest {
   @Test
   @DisplayName("should delete todo")
   void delete_todo() {
-    HttpResponse<Todo> todoResponse =
-        httpClient.toBlocking().exchange(DELETE("/" + todoCreated.getId()), Todo.class);
+    HttpResponse<Void> todoResponse =
+        httpClient.toBlocking().exchange(DELETE("/" + todoCreated.getId()), Void.class);
     assertThat(todoResponse.getStatus().getCode()).isEqualTo(200);
-    Todo todo = todoResponse.body();
-    assertThat(todo).isNull();
+    assertThat(todoResponse.body()).isNull();
   }
 
   @Test
@@ -86,6 +85,5 @@ class TodoControllerTest {
     assertThat(todo.getId()).isEqualTo(todoCreated.getId());
     assertThat(todo.getTodoText()).isEqualTo(updateTodoDto.getTodoTextToUpdate());
     assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
-
   }
 }

@@ -39,7 +39,7 @@ public class TodoControllerShould {
   @Test
   void delete_todo() {
     Integer id = 100;
-    HttpResponse<Todo> todo = todoController.deleteTodo(id);
+    HttpResponse<Void> todo = todoController.deleteTodo(id);
     verify(todoService).deleteTodo(id);
   }
 

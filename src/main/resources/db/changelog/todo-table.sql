@@ -2,7 +2,7 @@
 
 --changeset example-user:todo-table
 
-CREATE TABLE sys.todo (
+CREATE TABLE todo (
 	id INT auto_increment NOT NULL,
 	`date` DATE NOT NULL,
 	todo_text varchar(100) NOT NULL,

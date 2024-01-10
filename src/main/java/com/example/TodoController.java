@@ -27,7 +27,7 @@ public class TodoController {
   }
 
   @Delete(value = "/{id}")
-  public HttpResponse<Todo> deleteTodo(@PathVariable Integer id) {
+  public HttpResponse<Void> deleteTodo(@PathVariable Integer id) {
     todoService.deleteTodo(id);
     return HttpResponse.ok();
   }
