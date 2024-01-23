@@ -16,12 +16,16 @@ public class Todo {
   @Column(name = "date")
   private Date todoDate;
 
+  @Column(name = "category")
+  private String category;
+
   public Todo() {}
 
-  public Todo(int id, String todoText, Date todoDate) {
+  public Todo(int id, String todoText, Date todoDate, String category) {
     this.id = id;
     this.todoText = todoText;
     this.todoDate = todoDate;
+    this.category = category;
   }
 
   public int getId() {
@@ -42,5 +46,13 @@ public class Todo {
 
   public void setTodoDate(Date todoDate) {
     this.todoDate = todoDate;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 }

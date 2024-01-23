@@ -24,14 +24,14 @@ class TodoControllerTest {
 
   @BeforeEach
   void setUp() {
-    CreateTodoDto todoBody = new CreateTodoDto("todo created");
+    CreateTodoDto todoBody = new CreateTodoDto("todo created","Personal");
     todoCreated = httpClient.toBlocking().retrieve(POST("/create", todoBody), Todo.class);
   }
 
   @Test
   @DisplayName("should create todo")
   void create_todo() {
-    CreateTodoDto todoBody = new CreateTodoDto("first todo");
+    CreateTodoDto todoBody = new CreateTodoDto("first todo","Personal");
     HttpResponse<Todo> todoResponse =
         httpClient.toBlocking().exchange(POST("/create", todoBody), Todo.class);
     assertThat(todoResponse.getStatus().getCode()).isEqualTo(201);
@@ -41,6 +41,7 @@ class TodoControllerTest {
     assertThat(todo.getId()).isNotNull();
     assertThat(todo.getTodoText()).isEqualTo("first todo");
     assertThat(todo.getTodoDate()).isInstanceOf(Date.class);
+    assertThat(todo.getCategory()).isEqualTo("Personal");
   }
 
   @Test

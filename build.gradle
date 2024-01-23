@@ -15,7 +15,7 @@ dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut:micronaut-http-validation")
     implementation("io.micronaut:micronaut-jackson-databind")
-    compileOnly("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-http-client")
     runtimeOnly("ch.qos.logback:logback-classic")
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("org.mockito:mockito-core")
@@ -26,6 +26,8 @@ dependencies {
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("io.micronaut:micronaut-management")
+    testImplementation 'com.github.tomakehurst:wiremock-jre8:2.33.2'
+    testImplementation('org.mockito:mockito-junit-jupiter')
 }
 
 

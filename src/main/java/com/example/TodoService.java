@@ -16,6 +16,7 @@ public class TodoService {
     Todo todo = new Todo();
     todo.setTodoText(todoToCreate.getTodoText());
     todo.setTodoDate(new Date());
+    todo.setCategory(todoToCreate.getCategory());
     return todoRepository.save(todo);
   }
 

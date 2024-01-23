@@ -10,3 +10,5 @@ liquibase:
   datasources:
     default:
       change-log: db/liquibase-changelog.yml
+carsApi:
+  hostUrl: 'http://localhost:9090'

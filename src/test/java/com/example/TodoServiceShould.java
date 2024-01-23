@@ -20,16 +20,16 @@ public class TodoServiceShould {
 
   @BeforeEach
   void setUp() {
-    todo1 = new Todo(1, "todo1", new Date());
-    todo2 = new Todo(2, "todo2", new Date());
+    todo1 = new Todo(1, "todo1", new Date(), "Personal");
+    todo2 = new Todo(2, "todo2", new Date(), "Work");
     todoRepository = mock(TodoRepository.class);
     todoService = new TodoService(todoRepository);
   }
 
   @Test
   void create_todo() {
-    CreateTodoDto todoToCreate = new CreateTodoDto("first todo");
-    Todo currentTodo = new Todo(1, todoToCreate.getTodoText(), new Date());
+    CreateTodoDto todoToCreate = new CreateTodoDto("first todo","Personal");
+    Todo currentTodo = new Todo(1, todoToCreate.getTodoText(), new Date(), todoToCreate.getCategory());
     when(todoRepository.save(Mockito.any())).thenReturn(currentTodo);
     Todo todo = todoService.create(todoToCreate);
     verify(todoRepository).save(Mockito.any());
@@ -68,7 +68,7 @@ public class TodoServiceShould {
     Integer id = todo1.getId();
     String todoTextToUpdate = "updated todo";
     when(todoRepository.findById(id)).thenReturn(Optional.ofNullable(todo1));
-    Todo expectedTodo = new Todo(id, todoTextToUpdate, todo1.getTodoDate());
+    Todo expectedTodo = new Todo(id, todoTextToUpdate, todo1.getTodoDate(), todo1.getCategory());
     when(todoRepository.update(Mockito.any())).thenReturn(expectedTodo);
     Todo updatedTodo = todoService.updateTodo(id, todoTextToUpdate);
     verify(todoRepository).findById(id);

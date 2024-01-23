@@ -18,7 +18,7 @@ public class TodoControllerShould {
 
   @Test
   void create_todo() {
-    CreateTodoDto todoToCreate = new CreateTodoDto("first todo");
+    CreateTodoDto todoToCreate = new CreateTodoDto("first todo","Personal");
     HttpResponse<Todo> todo = todoController.createTodo(todoToCreate);
     verify(todoService).create(todoToCreate);
   }
